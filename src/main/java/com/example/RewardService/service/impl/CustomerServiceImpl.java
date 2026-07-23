@@ -1,19 +1,26 @@
 package com.example.RewardService.service.impl;
 
 
+import com.example.RewardService.controller.CustomerController;
 import com.example.RewardService.dto.CreateCustomerResponse;
 import com.example.RewardService.dto.CustomerDTO;
+import com.example.RewardService.exception.DuplicateCustomerException;
 import com.example.RewardService.exception.ResourceNotFoundException;
 import com.example.RewardService.dto.CreateCustomerRequest;
 import com.example.RewardService.model.Customer;
 import com.example.RewardService.repository.CustomerRepository;
 import com.example.RewardService.service.CustomerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+
+    public static final Logger LOGGER= LoggerFactory.getLogger(CustomerServiceImpl.class);
+
 
     private final CustomerRepository customerRepository;
 
@@ -43,12 +50,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO customerMapping(Customer customer) {
-        return new CustomerDTO(customer.getAddress(),customer.getPhoneNo(),customer.getEmail(), customer.getName(),customer.getId());
+        return new CustomerDTO(customer.getId(),customer.getName(),customer.getAddress(),customer.getPhoneNo(),customer.getEmail());
     }
 
     @Override
     public CreateCustomerResponse createCustomer(CreateCustomerRequest request)
     {
+
+        if (customerRepository.existsByName(request.getName())) {
+            LOGGER.warn("Customer already exists with name: {}", request.getName());
+            throw new DuplicateCustomerException(
+                    "Customer already exists with name: " + request.getName());
+        }
+
+
         Customer customer = Customer.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -58,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer = customerRepository.save(customer);
 
+        LOGGER.info("Customer created successfully with id: {}", customer.getId());
         return CreateCustomerResponse.builder()
                 .customerId(customer.getId())
                 .name(customer.getName())

@@ -7,6 +7,7 @@ import com.example.RewardService.repository.CustomerRepository;
 import com.example.RewardService.repository.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,9 @@ class TransactionControllerIntegrationTest {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+//    private ObjectMapper objectMapper=new ObjectMapper();
 
     private Customer alice;
 
@@ -56,7 +58,7 @@ class TransactionControllerIntegrationTest {
     void createTransaction_returns201AndCalculatedPoints() throws Exception {
         TransactionRequest request = new TransactionRequest(alice.getId(), LocalDate.of(2024, 1, 15), new BigDecimal("120.00"));
 
-        mockMvc.perform(post("/api/transactions")
+        mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -73,7 +75,7 @@ class TransactionControllerIntegrationTest {
                 }
                 """.formatted(alice.getId());
 
-        mockMvc.perform(post("/api/transactions")
+        mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidJson))
                 .andExpect(status().isBadRequest())
@@ -90,7 +92,7 @@ class TransactionControllerIntegrationTest {
                 }
                 """.formatted(alice.getId());
 
-        mockMvc.perform(post("/api/transactions")
+        mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidJson))
                 .andExpect(status().isBadRequest())
@@ -102,7 +104,7 @@ class TransactionControllerIntegrationTest {
         TransactionRequest request = new TransactionRequest(
                 alice.getId(), LocalDate.now().plusDays(5), new BigDecimal("60.00"));
 
-        mockMvc.perform(post("/api/transactions")
+        mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -113,7 +115,7 @@ class TransactionControllerIntegrationTest {
     void createTransaction_unknownCustomer_returns404() throws Exception {
         TransactionRequest request = new TransactionRequest(999999L, LocalDate.of(2024, 1, 15), new BigDecimal("60.00"));
 
-        mockMvc.perform(post("/api/transactions")
+        mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
@@ -124,7 +126,7 @@ class TransactionControllerIntegrationTest {
         transactionRepository.save(new Transaction(alice, LocalDate.of(2024, 1, 15), new BigDecimal("120.00")));
         transactionRepository.save(new Transaction(alice, LocalDate.of(2024, 2, 10), new BigDecimal("80.00")));
 
-        mockMvc.perform(get("/api/transactions")
+        mockMvc.perform(get("/api/v1/transactions")
                         .param("customerId", String.valueOf(alice.getId()))
                         .param("startDate", "2024-01-01")
                         .param("endDate", "2024-01-31"))
@@ -135,7 +137,7 @@ class TransactionControllerIntegrationTest {
 
     @Test
     void getTransactions_invertedDateRange_returns400() throws Exception {
-        mockMvc.perform(get("/api/transactions")
+        mockMvc.perform(get("/api/v1/transactions")
                         .param("startDate", "2024-03-01")
                         .param("endDate", "2024-01-01"))
                 .andExpect(status().isBadRequest());

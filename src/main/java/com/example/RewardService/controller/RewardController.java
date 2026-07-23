@@ -4,7 +4,6 @@ import com.example.RewardService.dto.CustomerRewardSummaryDTO;
 import com.example.RewardService.service.RewardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,10 +14,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rewards")
+@RequestMapping("/api/v1")
 public class RewardController {
 
-    private static final Logger LOGGER =LoggerFactory.getLogger(RewardController.class);
+    public static final Logger LOGGER =LoggerFactory.getLogger(RewardController.class);
+
     private final RewardService rewardService;
 
     public RewardController(RewardService rewardService) {
@@ -26,7 +26,7 @@ public class RewardController {
     }
 
     @Operation(summary = "Get reward summary for all customers By Default 3 month or specify the date range ")
-    @GetMapping("/getRewardsForAllCustomers")
+    @GetMapping("/rewards")
     public ResponseEntity<List<CustomerRewardSummaryDTO>> getAllRewards(
             @Parameter(description = "Inclusive start date, e.g. 2024-01-01")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -46,7 +46,7 @@ public class RewardController {
     }
 
     @Operation(summary = "Get reward summary for  customers By customerId ")
-    @GetMapping("/customers/{customerId}")
+    @GetMapping("/rewards/customerId/{customerId}")
     public ResponseEntity<CustomerRewardSummaryDTO> getRewardsByCustomerId(
             @PathVariable Long customerId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -65,7 +65,7 @@ public class RewardController {
 
 
     @Operation(summary = "Get reward summary for  customers By customerName ")
-    @GetMapping("/customers/name/{customerName}")
+    @GetMapping("/rewards/customerName/{customerName}")
     public ResponseEntity<CustomerRewardSummaryDTO> getRewardsByCustomerName(
             @PathVariable String customerName,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

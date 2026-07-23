@@ -1,6 +1,7 @@
 package com.example.RewardService.controller;
 
 
+import com.example.RewardService.exception.DuplicateCustomerException;
 import com.example.RewardService.exception.ErrorResponse;
 import com.example.RewardService.exception.InvalidDateRangeException;
 import com.example.RewardService.exception.ResourceNotFoundException;
@@ -35,6 +36,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(DuplicateCustomerException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateCustomer(
+            DuplicateCustomerException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse body = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> fieldErrors = new HashMap<>();

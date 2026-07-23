@@ -93,7 +93,7 @@ Once running:
 
 ## API reference
 
-All endpoints are prefixed with `/api`. All error responses share this shape:
+All endpoints are prefixed with `/api/v1`. All error responses share this shape:
 
 ```json
 {
@@ -109,23 +109,25 @@ Validation failures additionally include a `validationErrors` map of `field -> m
 
 ### Customers
 
-| Method | Path | Description |
-|---|---|---|
-| GET | `/api/customers` | List all customers |
-| GET | `/api/customers/{id}` | Get a single customer |
+| Method | Path                            | Description |
+|------|---------------------------------|---|
+| POST | `/api/v1/customers`             | create a new customer  
+| GET  | `/api/v1/customers`             | List all customers |
+| GET  | `/api/v1/customers/id/{id}`     | Get a single customer |
+| GET  | `/api/v1/customers/name/{Name}` | Get a single customer |
 
 ### Transactions
 
-| Method | Path | Description |
-|---|---|---|
-| POST | `/api/transactions` | Record a new purchase |
-| GET | `/api/transactions` | List transactions, optionally filtered |
+| Method | Path                   | Description |
+|---|------------------------|---|
+| POST | `/api/v1/transactions` | Record a new purchase |
+| GET | `/api/v1/transactions` | List transactions, optionally filtered |
 
 **GET `/api/transactions` query parameters** (all optional, combinable):
 - `customerId` — only this customer's transactions
 - `startDate`, `endDate` — inclusive date range (`yyyy-MM-dd`)
 
-**POST `/api/transactions` request body:**
+**POST `/api/v1/transactions` request body:**
 ```json
 {
   "customerId": 1,
@@ -149,15 +151,15 @@ Validation: `customerId` required and must reference an existing customer (404 i
 
 ### Rewards
 
-| Method | Path | Description |
-|---|---|---|
-| GET | `/api/rewards` | Reward summary for **every** customer |
-| GET | `/api/rewards/customers/{customerId}` | Reward summary for one customer, by id |
-| GET | `/api/rewards/customers/name/{customerName}` | Reward summary for one customer, by name (case-insensitive) |
+| Method | Path                                      | Description |
+|---|-------------------------------------------|---|
+| GET | `/api/v1/rewards`                         | Reward summary for **every** customer |
+| GET | `/api/v1/rewards/customerId/{customerId}` | Reward summary for one customer, by id |
+| GET | `/api/v1/rewards/customerName/{customerName}`         | Reward summary for one customer, by name (case-insensitive) |
 
 All three accept optional `startDate` and `endDate` query parameters (`yyyy-MM-dd`, inclusive) to scope the calculation to a date range. Omit both to aggregate over all recorded transactions.
 
-**Example: `GET /api/rewards/customers/1`**
+**Example: `GET /api/rewards/customerId/1`**
 ```json
 {
   "customerId": 1,

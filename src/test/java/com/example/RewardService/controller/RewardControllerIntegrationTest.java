@@ -55,7 +55,7 @@ class RewardControllerIntegrationTest {
 
     @Test
     void getRewardsByCustomerId_returnsMonthlyBreakdownAndTotal() throws Exception {
-        mockMvc.perform(get("/api/rewards/customers/{id}", alice.getId()))
+        mockMvc.perform(get("/api/v1/rewards/customerId/{customerId}", alice.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customerId").value(alice.getId()))
                 .andExpect(jsonPath("$.customerName").value("Alice Anderson"))
@@ -67,14 +67,14 @@ class RewardControllerIntegrationTest {
 
     @Test
     void getRewardsByCustomerName_isCaseInsensitive() throws Exception {
-        mockMvc.perform(get("/api/rewards/customers/name/{name}", "alice anderson"))
+        mockMvc.perform(get("/api/v1/rewards/customerName/{customerName}", "alice anderson"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPoints").value(115));
     }
 
     @Test
     void getRewardsByCustomerId_withDateRangeFilter_onlyIncludesMatchingMonth() throws Exception {
-        mockMvc.perform(get("/api/rewards/customers/{id}", alice.getId())
+        mockMvc.perform(get("/api/v1/rewards/customerId/{customerId}", alice.getId())
                         .param("startDate", "2024-02-01")
                         .param("endDate", "2024-02-29"))
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ class RewardControllerIntegrationTest {
 
     @Test
     void getRewardsByCustomerId_invertedDateRange_returns400() throws Exception {
-        mockMvc.perform(get("/api/rewards/customers/{id}", alice.getId())
+        mockMvc.perform(get("/api/v1/rewards/customerId/{customerId}", alice.getId())
                         .param("startDate", "2024-03-01")
                         .param("endDate", "2024-01-01"))
                 .andExpect(status().isBadRequest())
@@ -94,7 +94,7 @@ class RewardControllerIntegrationTest {
 
     @Test
     void getRewardsByUnknownCustomerId_returns404() throws Exception {
-        mockMvc.perform(get("/api/rewards/customers/{id}", 999999L))
+        mockMvc.perform(get("/api/v1/rewards/customerId/{customerId}", 999999L))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404));
     }

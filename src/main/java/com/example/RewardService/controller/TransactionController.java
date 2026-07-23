@@ -6,7 +6,6 @@ import com.example.RewardService.dto.TransactionResponse;
 import com.example.RewardService.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/v1")
 public class TransactionController {
 
     public static final Logger LOGGER= LoggerFactory.getLogger(TransactionController.class);
@@ -31,7 +30,7 @@ public class TransactionController {
     }
 
     @Operation(summary = "Record a new purchase transaction for a customer")
-    @PostMapping("/createTransaction")
+    @PostMapping("/transactions")
     public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody TransactionRequest request) {
 
         LOGGER.info(
@@ -53,7 +52,7 @@ public class TransactionController {
 
 
     @Operation(summary = "Get Transaction  Detail  by customerId and date range and by default it will fetch all transaction  ")
-    @GetMapping
+    @GetMapping("/transactions")
     public ResponseEntity<List<TransactionResponse>> getTransactions(
             @Parameter(description = "Filter to a single customer's transactions")
             @RequestParam(required = false) Long customerId,
