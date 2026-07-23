@@ -16,7 +16,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
+//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -49,7 +49,7 @@ class TransactionControllerIntegrationTest {
     void setUp() {
         transactionRepository.deleteAll();
         customerRepository.deleteAll();
-        alice = customerRepository.save(new Customer("Alice Anderson"));
+        alice = customerRepository.save(new Customer("Alice Anderson","abc@gamil.com","1234567","US street"));
     }
 
     @Test

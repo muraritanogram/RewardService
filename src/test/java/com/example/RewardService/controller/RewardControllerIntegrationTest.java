@@ -46,7 +46,7 @@ class RewardControllerIntegrationTest {
         transactionRepository.deleteAll();
         customerRepository.deleteAll();
 
-        alice = customerRepository.save(new Customer("Alice Anderson"));
+        alice = customerRepository.save(new Customer("Alice Anderson","abc@gamil.com","1234567","US street"));
 
         transactionRepository.save(new Transaction(alice, LocalDate.of(2024, 1, 15), new BigDecimal("120.00"))); // 90
         transactionRepository.save(new Transaction(alice, LocalDate.of(2024, 1, 22), new BigDecimal("45.00")));  // 0

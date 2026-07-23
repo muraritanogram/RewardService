@@ -40,7 +40,7 @@ class TransactionServiceImplTest {
     @BeforeEach
     void setUp() {
         transactionService = new TransactionServiceImpl(transactionRepository, customerService, new RewardCalculator());
-        alice = new Customer("Alice Anderson");
+        alice = new Customer("Alice Anderson","abc@gamil.com","1234567","US street");
         alice.setId(1L);
     }
 

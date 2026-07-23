@@ -41,7 +41,7 @@ class RewardServiceImplTest {
     void setUp() {
         // Use the real calculator so the aggregation is checked against real math.
         rewardService = new RewardServiceImpl(transactionRepository, customerService, new RewardCalculator());
-        alice = new Customer("Alice Anderson");
+        alice = new Customer("Alice Anderson","abc@gamil.com","1234567","US street");
         alice.setId(1L);
     }
 
