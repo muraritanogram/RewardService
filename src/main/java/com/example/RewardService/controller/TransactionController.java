@@ -52,7 +52,7 @@ public class TransactionController {
     }
 
 
-
+    @Operation(summary = "Get Transaction  Detail  by customerId and date range and by default it will fetch all transaction  ")
     @GetMapping
     public ResponseEntity<List<TransactionResponse>> getTransactions(
             @Parameter(description = "Filter to a single customer's transactions")

@@ -25,7 +25,7 @@ public class RewardController {
         this.rewardService = rewardService;
     }
 
-
+    @Operation(summary = "Get reward summary for all customers By Default 3 month or specify the date range ")
     @GetMapping("/getRewardsForAllCustomers")
     public ResponseEntity<List<CustomerRewardSummaryDTO>> getAllRewards(
             @Parameter(description = "Inclusive start date, e.g. 2024-01-01")
@@ -45,6 +45,7 @@ public class RewardController {
         return ResponseEntity.ok(rewards);
     }
 
+    @Operation(summary = "Get reward summary for  customers By customerId ")
     @GetMapping("/customers/{customerId}")
     public ResponseEntity<CustomerRewardSummaryDTO> getRewardsByCustomerId(
             @PathVariable Long customerId,
@@ -63,6 +64,7 @@ public class RewardController {
     }
 
 
+    @Operation(summary = "Get reward summary for  customers By customerName ")
     @GetMapping("/customers/name/{customerName}")
     public ResponseEntity<CustomerRewardSummaryDTO> getRewardsByCustomerName(
             @PathVariable String customerName,

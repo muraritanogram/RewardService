@@ -39,6 +39,7 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createCustomerResponse);
     }
 
+    @Operation(summary = "Get All Customer Details ")
     @GetMapping(value = "/allCustomer")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         LOGGER.info("Received request to fetch all customers");
@@ -51,6 +52,7 @@ public class CustomerController {
     }
 
 
+    @Operation(summary = "Get  Customer Details by CustomerID")
     @GetMapping("/id/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
 
@@ -64,6 +66,7 @@ public class CustomerController {
 
     }
 
+    @Operation(summary = "Get  Customer Details by CustomerName")
     @GetMapping("/name/{name}")
     public ResponseEntity<CustomerDTO> getCustomerByName(@PathVariable String name) {
         LOGGER.info("Received request to fetch customer with name: {}", name);

@@ -22,11 +22,11 @@ class RewardCalculatorTest {
             "0.00, 0",
             "10.00, 0",
             "49.99, 0",
-            "50.00, 0",     // exactly at the lower threshold earns nothing
-            "50.01, 0",     // rounds to 0 points for one cent over
+            "50.00, 0",
+            "50.01, 0",
             "75.00, 25",
-            "99.99, 50",    // 49.99 dollars over $50 rounds HALF_UP to 50 points
-            "100.00, 50",   // exactly at the upper threshold: flat 50
+            "99.99, 50",
+            "100.00, 50",
             "100.01, 50",
             "120.00, 90",
             "150.00, 150",
